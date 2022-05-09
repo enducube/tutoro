@@ -1,1 +1,10 @@
-he
+<html>
+    <body>
+        {% if current_user.is_authenticated %}
+        <p> hello {{ current_user.username }}<a href="/createtutorial">create a tutorial</a></p>
+        {% else %}
+        <a href="/register">register</a>
+        <a href="/login">login</a>
+        {% endif %}
+    </body>
+</html>

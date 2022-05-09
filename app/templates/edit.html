@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" src="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <h1>{{ tutorial.title }}</h1>
+        <form method="POST" id="save">
+            {{ saveform.csrf_token }}
+            <input type="submit" value="save changes">
+        </form>
+        {% for s in sections %}
+        <textarea id="{{ s.id }}" class="section">{{ s.content }}</textarea><br>
+        {% endfor %}
+        <form method="POST">
+            {{ asform.csrf_token }}
+            {{ asform.type }}
+            <input type="submit" value="add section">
+        </form>
+        <script>
+            $("form#save").submit(function(e){
+                
+                e.preventDefault();
+                var sections = { id: "{{ tutorial.id }}" };
+                $(".section").each(function(i){
+                    sections[$(this).attr("id")] = $(this).val()
+                });
+                console.log(sections);
+                $.ajax({
+                    url: '/save',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: sections
+                });
+                
+            });
+        </script>
+    </body>
+</html>
